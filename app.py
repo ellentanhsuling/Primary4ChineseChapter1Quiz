@@ -54,6 +54,40 @@ def get_quiz_questions(level):
             "这部____的结局很精彩。": "喜剧",
             "他的心跳非常____。": "剧烈"
         }
+    elif level == 4:
+        st.write("Choose from these characters:")
+        choices = ["收集", "集合", "第二集"]
+        st.write(" | ".join(choices))
+        st.write("---")
+        return {
+            "老师要求同学们____在操场上。": "集合",
+            "这部电视剧的____很精彩。": "第二集",
+            "他喜欢____邮票。": "收集",
+            "我们正在____资料。": "收集",
+            "学生们都已经____在教室里了。": "集合"
+        }
+    elif level == 5:
+        st.write("Choose from these characters:")
+        choices = ["内外", "舞蹈", "观众", "手掌", "换衣服", "换主意", "方言", "预报", "建议", "疲倦", "情况"]
+        st.write(" | ".join(choices))
+        st.write("---")
+        return {
+            "这个剧场可以容纳上千名____。": "观众",
+            "天气____说今天会下雨。": "预报",
+            "她跳____的动作很优美。": "舞蹈",
+            "我们要了解事情的____。": "情况",
+            "他给了我一些很好的____。": "建议",
+            "学习了一天后，我感到很____。": "疲倦",
+            "这里的人说当地的____。": "方言",
+            "运动后要记得____。": "换衣服",
+            "商店____都很干净。": "内外",
+            "他经常____，让人摸不着头脑。": "换主意",
+            "他把钥匙放在____心。": "手掌",
+            "医生正在检查病人的____。": "情况",
+            "这个____很受欢迎。": "舞蹈",
+            "老师____我们多做练习。": "建议",
+            "请注意天气____。": "预报"
+        }
 
 def main():
     st.title("Chinese Characters Quiz")
@@ -97,10 +131,9 @@ def main():
     if st.session_state.answered:
         st.write(f"Your score: {st.session_state.score}/{len(questions)}")
         
-        # Progress to next level if score is perfect
         if st.session_state.score == len(questions):
             st.balloons()
-            if st.session_state.level < 3:
+            if st.session_state.level < 5:
                 st.success(f"Perfect score! Moving to Level {st.session_state.level + 1}! 做得好！")
                 if st.button("Next Level"):
                     st.session_state.level += 1
@@ -108,13 +141,13 @@ def main():
                     st.session_state.answered = False
                     st.experimental_rerun()
             else:
-                st.success("Congratulations! You've completed all levels! 太棒了！")
+                st.success("🎉 Excellent work! You've mastered all levels of Chapter 1! 太棒了！")
+                st.success("Ready for more challenges? Start Chapter 2 to learn new characters! 准备好开始第二章吗？")
         elif st.session_state.score >= len(questions)/2:
             st.success("Good effort! Keep practicing! 继续加油！")
         else:
             st.info("Keep practicing! You'll get better! 继续学习！")
         
-        # Add retry button
         if st.button("Try Again"):
             st.session_state.score = 0
             st.session_state.answered = False
