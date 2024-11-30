@@ -87,6 +87,9 @@ def main():
             for question, user_answer in user_answers.items():
                 if user_answer == questions[question]:
                     score += 1
+                    st.success(f"✓ {question} - Correct!")
+                else:
+                    st.error(f"✗ {question} - Your answer: {user_answer} | Correct answer: {questions[question]}")
             
             st.session_state.score = score
             st.session_state.answered = True
