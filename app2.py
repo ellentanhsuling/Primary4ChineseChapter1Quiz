@@ -4,60 +4,53 @@ import random
 def get_quiz_questions(level):
     if level == 1:
         st.write("Choose from these characters:")
-        choices = ["不怕", "词语", "表示", "苹果", "暖暖", "外套", "帽子"]
+        choices = ["不怕 (bú pà)", "词语 (cí yǔ)", "表示 (biǎo shì)", 
+                  "苹果 (píng guǒ)", "暖暖 (nuǎn nuǎn)", "外套 (wài tào)", 
+                  "帽子 (mào zi)"]
         st.write(" | ".join(choices))
         st.write("---")
         return {
-            "天气冷了，我穿上____。": "外套",
-            "冬天戴上____可以保暖。": "帽子",
-            "他____黑暗的环境。": "不怕",
-            "这个____的意思是什么？": "词语",
-            "他点头____同意。": "表示",
-            "这个____又大又红。": "苹果",
-            "阳光____地照在身上。": "暖暖",
-            "妈妈给我买了新____。": "帽子",
-            "这件____很保暖。": "外套",
-            "老师教我们新的____。": "词语"
+            "天气冷了，我穿上____。": "外套 (wài tào)",
+            "冬天戴上____可以保暖。": "帽子 (mào zi)",
+            "他____黑暗的环境。": "不怕 (bú pà)",
+            "这个____的意思是什么？": "词语 (cí yǔ)",
+            "他点头____同意。": "表示 (biǎo shì)",
+            "这个____又大又红。": "苹果 (píng guǒ)",
+            "阳光____地照在身上。": "暖暖 (nuǎn nuǎn)"
         }
     elif level == 2:
         st.write("Choose from these characters:")
-        choices = ["急急忙忙", "鼓起", "靠", "挤", "姑姑", "递给"]
+        choices = ["急急忙忙 (jí jí máng máng)", "鼓起 (gǔ qǐ)", "靠 (kào)", 
+                  "挤 (jǐ)", "姑姑 (gū gu)", "递给 (dì gěi)"]
         st.write(" | ".join(choices))
         st.write("---")
         return {
-            "他____地跑出门。": "急急忙忙",
-            "小明____勇气说话。": "鼓起",
-            "请不要____着墙。": "靠",
-            "公交车上很____。": "挤",
-            "____买了礼物给我。": "姑姑",
-            "他____我一本书。": "递给",
-            "妹妹____我吃的。": "递给",
-            "我的____住在北京。": "姑姑",
-            "他____完成作业。": "急急忙忙",
-            "人太多，很____。": "挤"
+            "他____地跑出门。": "急急忙忙 (jí jí máng máng)",
+            "小明____勇气说话。": "鼓起 (gǔ qǐ)",
+            "请不要____着墙。": "靠 (kào)",
+            "公交车上很____。": "挤 (jǐ)",
+            "____买了礼物给我。": "姑姑 (gū gu)",
+            "他____我一本书。": "递给 (dì gěi)"
         }
     elif level == 3:
         st.write("Choose from these characters:")
-        choices = ["灵机一动", "鱼丸", "倾盆大雨", "不怕", "递给", "姑姑"]
+        choices = ["灵机一动 (líng jī yí dòng)", "鱼丸 (yú wán)", 
+                  "倾盆大雨 (qīng pén dà yǔ)", "不怕 (bú pà)", 
+                  "递给 (dì gěi)", "姑姑 (gū gu)"]
         st.write(" | ".join(choices))
         st.write("---")
         return {
-            "他____想到了好主意。": "灵机一动",
-            "这个____很好吃。": "鱼丸",
-            "外面下着____。": "倾盆大雨",
-            "我们____困难。": "不怕",
-            "请____我那本书。": "递给",
-            "我和____去公园。": "姑姑",
-            "他____做出了决定。": "灵机一动",
-            "汤里的____很新鲜。": "鱼丸",
-            "昨天下了一场____。": "倾盆大雨",
-            "小朋友们____黑暗。": "不怕"
+            "他____想到了好主意。": "灵机一动 (líng jī yí dòng)",
+            "这个____很好吃。": "鱼丸 (yú wán)",
+            "外面下着____。": "倾盆大雨 (qīng pén dà yǔ)",
+            "我们____困难。": "不怕 (bú pà)",
+            "请____我那本书。": "递给 (dì gěi)",
+            "我和____去公园。": "姑姑 (gū gu)"
         }
 
 def main():
     st.title("Chinese Characters Quiz - Chapter 2")
     
-    # Initialize session state
     if 'level' not in st.session_state:
         st.session_state.level = 1
     if 'score' not in st.session_state:
@@ -65,18 +58,32 @@ def main():
     if 'answered' not in st.session_state:
         st.session_state.answered = False
         
-    # Display current level
     st.subheader(f"Level {st.session_state.level}")
-    st.write("Fill in the blanks with the correct characters!")
+    st.write("Select the correct character for each sentence!")
     
-    # Get questions for current level
     questions = get_quiz_questions(st.session_state.level)
     
-    # Create form for quiz
     with st.form(f"quiz_form_level_{st.session_state.level}"):
         user_answers = {}
         for question, correct_answer in questions.items():
-            user_answer = st.text_input(question, key=f"{question}_{st.session_state.level}")
+            # Get choices based on current level
+            if st.session_state.level == 1:
+                choices = ["不怕 (bú pà)", "词语 (cí yǔ)", "表示 (biǎo shì)", 
+                          "苹果 (píng guǒ)", "暖暖 (nuǎn nuǎn)", "外套 (wài tào)", 
+                          "帽子 (mào zi)"]
+            elif st.session_state.level == 2:
+                choices = ["急急忙忙 (jí jí máng máng)", "鼓起 (gǔ qǐ)", "靠 (kào)", 
+                          "挤 (jǐ)", "姑姑 (gū gu)", "递给 (dì gěi)"]
+            else:
+                choices = ["灵机一动 (líng jī yí dòng)", "鱼丸 (yú wán)", 
+                          "倾盆大雨 (qīng pén dà yǔ)", "不怕 (bú pà)", 
+                          "递给 (dì gěi)", "姑姑 (gū gu)"]
+            
+            user_answer = st.radio(
+                question,
+                choices,
+                key=f"{question}_{st.session_state.level}"
+            )
             user_answers[question] = user_answer
         
         submit_button = st.form_submit_button("Check Answers")
