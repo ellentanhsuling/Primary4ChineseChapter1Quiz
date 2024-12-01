@@ -34,8 +34,8 @@ def get_quiz_questions(level):
         }
     elif level == 3:
         st.write("Choose from these characters:")
-        choices = ["连续剧 (lián xù jù)", "喜剧 (xǐ jù)", "邻居 (lín jū)", "悲剧 (bēi jù)", 
-                  "居住 (jū zhù)", "剧本 (jù běn)", "剧烈 (jù liè)"]
+        choices = ["连续剧 (lián xù jù)", "喜剧 (xǐ jù)", "邻居 (lín jū)", 
+                  "悲剧 (bēi jù)", "居住 (jū zhù)", "剧本 (jù běn)", "剧烈 (jù liè)"]
         st.write(" | ".join(choices))
         st.write("---")
         return {
@@ -61,9 +61,8 @@ def get_quiz_questions(level):
         }
     elif level == 5:
         st.write("Choose from these characters:")
-        choices = ["内外 (nèi wài)", "舞蹈 (wǔ dǎo)", "观众 (guān zhòng)", "手掌 (shǒu zhǎng)", 
-                  "换衣服 (huàn yī fu)", "换主意 (huàn zhǔ yi)", "方言 (fāng yán)", 
-                  "预报 (yù bào)", "建议 (jiàn yì)", "疲倦 (pí juàn)", "情况 (qíng kuàng)"]
+        choices = ["内外 (nèi wài)", "舞蹈 (wǔ dǎo)", "观众 (guān zhòng)", 
+                  "手掌 (shǒu zhǎng)", "换衣服 (huàn yī fu)", "建议 (jiàn yì)"]
         st.write(" | ".join(choices))
         st.write("---")
         return {
@@ -74,4 +73,96 @@ def get_quiz_questions(level):
             "他给了我一些很好的____。": "建议 (jiàn yì)"
         }
 
-# Rest of the code remains the same as in your original file
+def main():
+    st.title("Chinese Characters Quiz")
+    
+    st.markdown("""
+        <style>
+        .stButton > button {
+            width: 150px;
+            height: 100px;
+            margin: 5px;
+            white-space: normal;
+            word-wrap: break-word;
+            font-size: 16px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    if 'level' not in st.session_state:
+        st.session_state.level = 1
+    if 'score' not in st.session_state:
+        st.session_state.score = 0
+    if 'answered' not in st.session_state:
+        st.session_state.answered = False
+    if 'selected_answer' not in st.session_state:
+        st.session_state.selected_answer = {}
+        
+    st.subheader(f"Level {st.session_state.level}")
+    st.write("Click the correct character for each sentence!")
+    
+    questions = get_quiz_questions(st.session_state.level)
+    
+    for question, correct_answer in questions.items():
+        st.write(question)
+        
+        if st.session_state.level == 1:
+            choices = ["解开 (jiě kāi)", "了解 (liǎo jiě)", "解释 (jiě shì)", "解决 (jiě jué)"]
+        elif st.session_state.level == 2:
+            choices = ["播种 (bō zhǒng)", "广播 (guǎng bō)", "播放 (bō fàng)"]
+        elif st.session_state.level == 3:
+            choices = ["连续剧 (lián xù jù)", "喜剧 (xǐ jù)", "邻居 (lín jū)", 
+                      "悲剧 (bēi jù)", "居住 (jū zhù)", "剧本 (jù běn)", "剧烈 (jù liè)"]
+        elif st.session_state.level == 4:
+            choices = ["收集 (shōu jí)", "集合 (jí hé)", "第二集 (dì èr jí)"]
+        else:
+            choices = ["内外 (nèi wài)", "舞蹈 (wǔ dǎo)", "观众 (guān zhòng)", 
+                      "手掌 (shǒu zhǎng)", "换衣服 (huàn yī fu)", "建议 (jiàn yì)"]
+        
+        cols = st.columns(len(choices))
+        for idx, choice in enumerate(choices):
+            with cols[idx]:
+                if st.button(choice, key=f"{question}_{choice}"):
+                    st.session_state.selected_answer[question] = choice
+        
+        if question in st.session_state.selected_answer:
+            st.write(f"Selected: {st.session_state.selected_answer[question]}")
+        
+        st.write("---")
+    
+    if st.button("Check Answers"):
+        score = 0
+        for question, correct_answer in questions.items():
+            if question in st.session_state.selected_answer:
+                if st.session_state.selected_answer[question] == correct_answer:
+                    score += 1
+                    st.success(f"✓ {question} - Correct!")
+                else:
+                    st.error(f"✗ {question} - Your answer: {st.session_state.selected_answer[question]} | Correct answer: {correct_answer}")
+        
+        st.session_state.score = score
+        st.session_state.answered = True
+        
+        st.write(f"Your score: {score}/{len(questions)}")
+        
+        if score == len(questions):
+            st.balloons()
+            if st.session_state.level < 5:
+                st.success(f"Perfect score! Moving to Level {st.session_state.level + 1}! 做得好！")
+                if st.button("Next Level"):
+                    st.session_state.level += 1
+                    st.session_state.score = 0
+                    st.session_state.answered = False
+                    st.session_state.selected_answer = {}
+                    st.experimental_rerun()
+            else:
+                st.success("🎉 Excellent work! You've mastered all levels! 太棒了！")
+        
+        if st.button("Try Again"):
+            st.session_state.score = 0
+            st.session_state.answered = False
+            st.session_state.selected_answer = {}
+            st.experimental_rerun()
+
+if __name__ == "__main__":
+    main()
